@@ -1,13 +1,13 @@
 NAME = fractol
-SRC = main.c
+SRC = srcs/main.c
 OBJ = $(SRC:.c=.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I./includes/
 
-MLX_DIR = ./MLX
+MLX_DIR = ./MLX42/build
 MLX_LIB = $(MLX_DIR)/libmlx.a
 MLX_INC = -I$(MLX_DIR)
-MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+MLX_FLAGS = -L$(MLX_DIR) -lmlx42 -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 all: $(NAME)
 
@@ -30,3 +30,5 @@ fclean: clean
 re:
 	$(MAKE) fclean
 	$(MAKE) all
+
+.PHONY: all clean fclean re

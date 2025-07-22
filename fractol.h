@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/22 11:09:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/22 13:24:27 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # define HEIGHT 800
 
 typedef struct s_vars {
-	void *mlx;
-	void *win;
+	void	*mlx;
+	void	*win;
 }	t_vars;
 
 #endif

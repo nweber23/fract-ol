@@ -7,7 +7,7 @@ CFLAGS = -Wall -Wextra -Werror
 MLX_DIR = ./MLX
 MLX_LIB = $(MLX_DIR)/libmlx.a
 MLX_INC = -I$(MLX_DIR)
-MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 
 all: $(NAME)
 

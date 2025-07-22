@@ -6,31 +6,38 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/22 13:49:00 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/22 15:09:55 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
-{
-	return (r << 24 | g << 16 | b << 8 | a);
-}
-
 void ft_randomize(void* param)
 {
 	(void)param;
-	for (uint32_t i = 0; i < image->width; ++i)
+	uint32_t x, y;
+	int cx = 400;
+	int cy = 400;
+	int radius = 100;
+	int thickness = 1;
+
+	for (y = 0; y < image->height; ++y)
 	{
-		for (uint32_t y = 0; y < image->height; ++y)
+		for (x = 0; x < image->width; ++x)
 		{
-			uint32_t color = ft_pixel(
-				rand() % 0xFF,
-				rand() % 0xFF,
-				rand() % 0xFF,
-				rand() % 0xFF
-			);
-			mlx_put_pixel(image, i, y, color);
+			mlx_put_pixel(image, x, y, 0xFFFFFFFF);
+		}
+	}
+	for (y = 0; y < image->height; ++y)
+	{
+		for (x = 0; x < image->width; ++x)
+		{
+			int dx = (int)x - cx;
+			int dy = (int)y - cy;
+			int dist2 = dx * dx + dy * dy;
+			int r2 = radius * radius;
+			if (dist2 >= r2 - 2 * radius * thickness && dist2 <= r2 + 2 * radius * thickness)
+				mlx_put_pixel(image, x, y, 0xFFFF0000);
 		}
 	}
 }

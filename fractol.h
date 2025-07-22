@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/22 10:56:36 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/22 11:09:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "MLX/mlx.h"
 # include <stdlib.h>
 # include <math.h>
+# include <stdio.h>
 
 # define WIDTH 800
 # define HEIGHT 800

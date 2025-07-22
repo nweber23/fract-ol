@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/22 10:56:30 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/22 11:17:00 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	handle_close(void *param)
 int	handle_key(int keycode, void *param)
 {
 	t_vars *vars = (t_vars *)param;
+	printf("Keycode: %d\n", keycode);
 	if (keycode == 53)
 	{
 		mlx_destroy_window(vars->mlx, vars->win);
@@ -29,7 +30,14 @@ int	handle_key(int keycode, void *param)
 	return (0);
 }
 
-int main(void)
+int	handle_mouse(int button, int x, int y, t_vars *vars, void *param)
+{
+	vars = (t_vars *)param;
+	printf("Mouse Button: %d at x=%d and y=%d\n", button, x, y);
+	return (0);
+}
+
+int	main(void)
 {
 	t_vars vars;
 
@@ -37,6 +45,7 @@ int main(void)
 	vars.win = mlx_new_window(vars.mlx, 800, 600, "Hello MLX");
 	mlx_pixel_put(vars.mlx, vars.win, 400, 300, 0x00FF00);
 	mlx_hook(vars.win, 17, 0, handle_close, NULL);
+	mlx_mouse_hook(vars.win, handle_mouse, &vars);
 	mlx_key_hook(vars.win, handle_key, &vars);
 	mlx_loop(vars.mlx);
 	return 0;

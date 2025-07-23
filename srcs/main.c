@@ -6,82 +6,108 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/22 15:09:55 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:27:06 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-void ft_randomize(void* param)
-{
-	(void)param;
-	uint32_t x, y;
-	int cx = 400;
-	int cy = 400;
-	int radius = 100;
-	int thickness = 1;
+/*
+Mathe Explained
+	iter = 0 -> MAX ist 1000
+	min_x = -2.5, max_x = 1.0
+	min_y = -1.0, max_y = -1.0
+	Komplexe Zahl kann mit 2 double werten dargestellt werden|
+	zr = Realteil
+	zr_neu = zr * zr - zi * zi + cr
+	zi = Imaginärteil
+	zi_neu = 2 * zr * zi + ci;
+	cr = Realteil von c aka x-Koordinate
+	cr = x_min + (x / (double)WIDTH) * (x_max - x_min)
+	ci = Imaginärteil von c aka y-Koordinate
+	ci = y_min + (y / (double)HEIGHT) * (y_max - y_min)
+	c = Komplexe Zahl
+	c = cr + ci * i(i wird repraesentiert durch ci)
+*/
 
-	for (y = 0; y < image->height; ++y)
+int	mandelbrot(double cr, double ci)
+{
+	double zr = 0.0, zi = 0.0, temp;
+	int iter = 0;
+	while (zr * zr + zi * zi <= 4.0 && iter < MAX_ITER)
 	{
-		for (x = 0; x < image->width; ++x)
-		{
-			mlx_put_pixel(image, x, y, 0xFFFFFFFF);
-		}
+		temp = zr * zr - zi * zi + cr;
+		zi = 2 * zr * zi + ci;
+		zr = temp;
+		iter++;
 	}
-	for (y = 0; y < image->height; ++y)
+	return (iter);
+}
+
+void	render(void *param)
+{
+	t_data *data = (t_data *)param;
+	double x_min = -2.5, x_max = 1.0;
+	double y_min = -1.0, y_max = 1.0;
+
+	for (int y = 0; y < HEIGHT; y++)
 	{
-		for (x = 0; x < image->width; ++x)
+		for (int x = 0; x < WIDTH; x++)
 		{
-			int dx = (int)x - cx;
-			int dy = (int)y - cy;
-			int dist2 = dx * dx + dy * dy;
-			int r2 = radius * radius;
-			if (dist2 >= r2 - 2 * radius * thickness && dist2 <= r2 + 2 * radius * thickness)
-				mlx_put_pixel(image, x, y, 0xFFFF0000);
+			double cr = x_min + (x * (x_max - x_min) / WIDTH);
+			double ci = y_min + (y * (y_max - y_min) / HEIGHT);
+			int iter = mandelbrot(cr, ci);
+			double t = (double)iter / MAX_ITER;
+			uint8_t r = (uint8_t)(9 * (1 - t) * t * t * t * 255);
+			uint8_t g = (uint8_t)(15 * (1 - t) * (1 - t) * t * t * 255);
+			uint8_t b = (uint8_t)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
+			uint32_t color = 0xFF000000 | (r << 16) | (g << 8) | b;
+			mlx_put_pixel(data->image, x, y, color);
 		}
 	}
 }
 
-void ft_hook(void* param)
+void	ft_hook(void* param)
 {
-	mlx_t* mlx = param;
+	t_data *data = (t_data *)param;
+	mlx_t* mlx = data->mlx;
 
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
-	if (mlx_is_key_down(mlx, MLX_KEY_UP))
-		image->instances[0].y -= 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
-		image->instances[0].y += 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
-		image->instances[0].x -= 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
-		image->instances[0].x += 5;
+	if (mlx_is_key_down(mlx, MLX_KEY_UP) || mlx_is_key_down(mlx, MLX_KEY_S))
+		data->image->instances[0].y -= 5;
+	if (mlx_is_key_down(mlx, MLX_KEY_DOWN) || mlx_is_key_down(mlx, MLX_KEY_W))
+		data->image->instances[0].y += 5;
+	if (mlx_is_key_down(mlx, MLX_KEY_LEFT) || mlx_is_key_down(mlx, MLX_KEY_A))
+		data->image->instances[0].x -= 5;
+	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT) || mlx_is_key_down(mlx, MLX_KEY_D))
+		data->image->instances[0].x += 5;
 }
 
-int32_t main(void)
+int	main(void)
 {
-	mlx_t* mlx;
-	if (!(mlx = mlx_init(WIDTH, HEIGHT, "MLX42", true)))
+	t_data data;
+
+	data.mlx = mlx_init(WIDTH, HEIGHT, "Mandelbrot", true);
+	if (!data.mlx)
+		return (EXIT_FAILURE);
+	data.image = mlx_new_image(data.mlx, WIDTH, HEIGHT);
+	if (!data.image)
 	{
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
+		mlx_terminate(data.mlx);
+		return (EXIT_FAILURE);
 	}
-	if (!(image = mlx_new_image(mlx, 800, 800)))
+	if (mlx_image_to_window(data.mlx, data.image, 0, 0) < 0)
 	{
-		mlx_close_window(mlx);
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
+		mlx_delete_image(data.mlx, data.image);
+		mlx_terminate(data.mlx);
+		return (EXIT_FAILURE);
 	}
-	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
-	{
-		mlx_close_window(mlx);
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
-	}
-	mlx_loop_hook(mlx, ft_randomize, mlx);
-	mlx_loop_hook(mlx, ft_hook, mlx);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
+	render(&data);
+	mlx_loop_hook(data.mlx, ft_hook, &data);
+	mlx_loop(data.mlx);
+	mlx_delete_image(data.mlx, data.image);
+	mlx_terminate(data.mlx);
 	return (EXIT_SUCCESS);
 }
 

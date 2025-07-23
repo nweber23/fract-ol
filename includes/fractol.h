@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/22 14:36:38 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:29:51 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,14 @@
 # include <math.h>
 # include <stdio.h>
 
-# define WIDTH 800
-# define HEIGHT 800
+# define WIDTH 1920
+# define HEIGHT 1080
+# define MAX_ITER 1000
+
+typedef struct s_data {
+	mlx_t		*mlx;
+	mlx_image_t	*image;
+}	t_data;
 
 static mlx_image_t* image;
 

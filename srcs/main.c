@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/23 16:27:06 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/23 21:43:12 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,14 @@ Mathe Explained
 
 int	mandelbrot(double cr, double ci)
 {
-	double zr = 0.0, zi = 0.0, temp;
-	int iter = 0;
+	double	zr;
+	double	zi;
+	double	temp;
+	int		iter;
+
+	zr = 0.0;
+	zi = 0.0;
+	iter = 0;
 	while (zr * zr + zi * zi <= 4.0 && iter < MAX_ITER)
 	{
 		temp = zr * zr - zi * zi + cr;
@@ -44,59 +50,125 @@ int	mandelbrot(double cr, double ci)
 	return (iter);
 }
 
-void	render(void *param)
+void	put_pixel_color(t_data *data, int x, int y, int iter)
 {
-	t_data *data = (t_data *)param;
-	double x_min = -2.5, x_max = 1.0;
-	double y_min = -1.0, y_max = 1.0;
+	double	t;
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
+	uint32_t	color;
 
-	for (int y = 0; y < HEIGHT; y++)
+	t = (double)iter / MAX_ITER;
+	r = (uint8_t)(9 * (1 - t) * t * t * t * 255);
+	g = (uint8_t)(15 * (1 - t) * (1 - t) * t * t * 255);
+	b = (uint8_t)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
+	color = 0xFF000000 | (r << 16) | (g << 8) | b;
+	mlx_put_pixel(data->image, x, y, color);
+}
+
+void	render(t_data *data)
+{
+	int		x;
+	int		y;
+	double	cr;
+	double	ci;
+	int		iter;
+
+	y = 0;
+	while (y < HEIGHT)
 	{
-		for (int x = 0; x < WIDTH; x++)
+		x = 0;
+		while (x < WIDTH)
 		{
-			double cr = x_min + (x * (x_max - x_min) / WIDTH);
-			double ci = y_min + (y * (y_max - y_min) / HEIGHT);
-			int iter = mandelbrot(cr, ci);
-			double t = (double)iter / MAX_ITER;
-			uint8_t r = (uint8_t)(9 * (1 - t) * t * t * t * 255);
-			uint8_t g = (uint8_t)(15 * (1 - t) * (1 - t) * t * t * 255);
-			uint8_t b = (uint8_t)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
-			uint32_t color = 0xFF000000 | (r << 16) | (g << 8) | b;
-			mlx_put_pixel(data->image, x, y, color);
+			cr = data->x_min + (x * (data->x_max - data->x_min) / WIDTH);
+			ci = data->y_min + (y * (data->y_max - data->y_min) / HEIGHT);
+			iter = mandelbrot(cr, ci);
+			put_pixel_color(data, x, y, iter);
+			x++;
 		}
+		y++;
 	}
 }
 
-void	ft_hook(void* param)
+void	handle_movement(t_data *data, mlx_t *mlx)
 {
-	t_data *data = (t_data *)param;
-	mlx_t* mlx = data->mlx;
+	double	move_step;
 
+	move_step = 0.1 * (data->x_max - data->x_min);
+	if (mlx_is_key_down(mlx, MLX_KEY_UP))
+	{
+		data->y_min -= move_step;
+		data->y_max -= move_step;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
+	{
+		data->y_min += move_step;
+		data->y_max += move_step;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
+	{
+		data->x_min -= move_step;
+		data->x_max -= move_step;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
+	{
+		data->x_min += move_step;
+		data->x_max += move_step;
+	}
+}
+
+void	handle_zoom(t_data *data, mlx_t *mlx, double zoom_factor)
+{
+	double	x_center;
+	double	y_center;
+
+	x_center = (data->x_min + data->x_max) / 2;
+	y_center = (data->y_min + data->y_max) / 2;
+	if (mlx_is_key_down(mlx, MLX_KEY_W))
+	{
+		data->x_min = x_center + (data->x_min - x_center) * zoom_factor;
+		data->x_max = x_center + (data->x_max - x_center) * zoom_factor;
+		data->y_min = y_center + (data->y_min - y_center) * zoom_factor;
+		data->y_max = y_center + (data->y_max - y_center) * zoom_factor;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_S))
+	{
+		data->x_min = x_center + (data->x_min - x_center) / zoom_factor;
+		data->x_max = x_center + (data->x_max - x_center) / zoom_factor;
+		data->y_min = y_center + (data->y_min - y_center) / zoom_factor;
+		data->y_max = y_center + (data->y_max - y_center) / zoom_factor;
+	}
+}
+
+void	ft_hook(void *param)
+{
+	t_data	*data;
+	mlx_t	*mlx;
+
+	data = (t_data *)param;
+	mlx = data->mlx;
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
-	if (mlx_is_key_down(mlx, MLX_KEY_UP) || mlx_is_key_down(mlx, MLX_KEY_S))
-		data->image->instances[0].y -= 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_DOWN) || mlx_is_key_down(mlx, MLX_KEY_W))
-		data->image->instances[0].y += 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_LEFT) || mlx_is_key_down(mlx, MLX_KEY_A))
-		data->image->instances[0].x -= 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT) || mlx_is_key_down(mlx, MLX_KEY_D))
-		data->image->instances[0].x += 5;
+	handle_movement(data, mlx);
+	handle_zoom(data, mlx, 0.9);
+	render(data);
 }
 
 int	main(void)
 {
-	t_data data;
+	t_data	data;
 
 	data.mlx = mlx_init(WIDTH, HEIGHT, "Mandelbrot", true);
 	if (!data.mlx)
 		return (EXIT_FAILURE);
 	data.image = mlx_new_image(data.mlx, WIDTH, HEIGHT);
 	if (!data.image)
-	{
-		mlx_terminate(data.mlx);
-		return (EXIT_FAILURE);
-	}
+		return (mlx_terminate(data.mlx), EXIT_FAILURE);
+	data.x_min = -2.5;
+	data.x_max = 1.0;
+	data.y_min = -1.0;
+	data.y_max = 1.0;
+	data.zoom = 1.0;
 	if (mlx_image_to_window(data.mlx, data.image, 0, 0) < 0)
 	{
 		mlx_delete_image(data.mlx, data.image);
@@ -110,15 +182,3 @@ int	main(void)
 	mlx_terminate(data.mlx);
 	return (EXIT_SUCCESS);
 }
-
-/*
-ARROW_KEYS 123-126
-- LEFT	123
-- RIGHT	124
-- DOWN	125
-- UP	126
-MOUSE_WHEEl_UP 4
-MOUSE_WHEEL_DOWN 5
-SPACEBAR 49
-C 8
-*/

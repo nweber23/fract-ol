@@ -2,21 +2,37 @@ NAME = fractol
 SRC = srcs/main.c
 OBJ = $(SRC:.c=.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes/
+CFLAGS = -O3 -Wall -Wextra -Werror -I./includes/
 
+# OS detection
+UNAME_S := $(shell uname -s)
+
+# MLX42 configuration
 MLX_DIR = ./MLX42
 MLX_BUILD_DIR = $(MLX_DIR)/build
 MLX_LIB = $(MLX_BUILD_DIR)/libmlx.a
 MLX_INC = -I$(MLX_BUILD_DIR)
-MLX_FLAGS = -L$(MLX_BUILD_DIR) -lmlx42 -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 MLX_REPO = https://github.com/codam-coding-college/MLX42.git
+
+# Platform-specific settings
+ifeq ($(UNAME_S),Linux)
+	# Linux configuration
+	MLX_FLAGS = -L$(MLX_BUILD_DIR) -lmlx42 -ldl -lglfw -lm -pthread
+	CFLAGS += -D LINUX
+else ifeq ($(UNAME_S),Darwin)
+	# macOS configuration
+	MLX_FLAGS = -L$(MLX_BUILD_DIR) -lmlx42 -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+	CFLAGS += -D OSX
+else
+	$(error OS not supported: $(UNAME_S))
+endif
 
 all: $(NAME)
 
 $(NAME): $(OBJ) $(MLX_LIB)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(MLX_FLAGS)
 
-%.o: %.c $(MLX_LIB)
+%.o: %.c
 	$(CC) $(CFLAGS) $(MLX_INC) -c $< -o $@
 
 $(MLX_LIB): | $(MLX_DIR)

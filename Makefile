@@ -2,10 +2,14 @@ NAME = fractol
 SRC = srcs/main.c
 OBJ = $(SRC:.c=.o)
 CC = cc
-CFLAGS = -O3 -Wall -Wextra -Werror -I./includes/
+CFLAGS = -O3 -Wall -Wextra -Werror -I./includes/ -I./libft/includes/
 
 # OS detection
 UNAME_S := $(shell uname -s)
+
+# Library paths
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
 # MLX42 configuration
 MLX_DIR = ./MLX42
@@ -29,8 +33,8 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(MLX_LIB)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(MLX_FLAGS)
+$(NAME): $(OBJ) $(MLX_LIB) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(MLX_FLAGS) -L$(LIBFT_DIR) -lft
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(MLX_INC) -c $< -o $@
@@ -46,15 +50,18 @@ $(MLX_DIR):
 		echo "MLX42 repository already exists. Skipping clone."; \
 	fi
 
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
+
 clean:
 	rm -f $(OBJ)
 	if [ -d "$(MLX_BUILD_DIR)" ]; then $(MAKE) clean -C $(MLX_BUILD_DIR); fi
+	$(MAKE) clean -C $(LIBFT_DIR)
 
 fclean: clean
 	rm -f $(NAME)
+	$(MAKE) fclean -C $(LIBFT_DIR)
 
-re:
-	$(MAKE) fclean
-	$(MAKE) all
+re: fclean all
 
 .PHONY: all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/24 10:56:46 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/24 11:50:39 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ int	main(void)
 {
 	t_data data = {0};
 
-	data.mlx = mlx_init(WIDTH, HEIGHT, "Mandelbrot", true);
+	data.mlx = mlx_init(WIDTH, HEIGHT, "Mandelbrot", false);
 	if (!data.mlx)
 		return (EXIT_FAILURE);
 	data.image = mlx_new_image(data.mlx, WIDTH, HEIGHT);

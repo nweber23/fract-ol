@@ -6,14 +6,14 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/23 21:43:12 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/24 09:53:28 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
 /*
-Mathe Explained
+Mathe Explained Mandelbrot
 	iter = 0 -> MAX ist 1000
 	min_x = -2.5, max_x = 1.0
 	min_y = -1.0, max_y = -1.0
@@ -30,24 +30,22 @@ Mathe Explained
 	c = cr + ci * i(i wird repraesentiert durch ci)
 */
 
-int	mandelbrot(double cr, double ci)
-{
-	double	zr;
-	double	zi;
-	double	temp;
-	int		iter;
+int	mandelbrot(double cr, double ci) {
+	double zr = 0.0, zi = 0.0;
+	double zr2 = 0.0, zi2 = 0.0;
+	int iter = 0;
 
-	zr = 0.0;
-	zi = 0.0;
-	iter = 0;
-	while (zr * zr + zi * zi <= 4.0 && iter < MAX_ITER)
-	{
-		temp = zr * zr - zi * zi + cr;
+	while (zr2 + zi2 <= 4.0 && iter < MAX_ITER) {
 		zi = 2 * zr * zi + ci;
-		zr = temp;
+		zr = zr2 - zi2 + cr;
+		zr2 = zr * zr;
+		zi2 = zi * zi;
 		iter++;
+		if (iter > 16 && zr2 + zi2 < 0.001) {
+			return MAX_ITER;
+		}
 	}
-	return (iter);
+	return iter;
 }
 
 void	put_pixel_color(t_data *data, int x, int y, int iter)

@@ -6,16 +6,17 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 13:21:59 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/17 10:00:03 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/24 10:14:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "../libft/libft.h"
 # include <stdarg.h>
 # include <stdint.h>
+# include <unistd.h>
+# include <stdlib.h>
 
 // Mandatory functions
 int	ft_putchar(char c);

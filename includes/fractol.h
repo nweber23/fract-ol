@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/23 21:44:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/24 10:02:15 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FRACTOL_H
 
 # include "../MLX42/include/MLX42/MLX42.h"
+# include "../libft/libft.h"
 # include <stdlib.h>
 # include <math.h>
 # include <stdio.h>

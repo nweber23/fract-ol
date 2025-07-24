@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/24 10:02:15 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/24 10:52:42 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 # define FRACTOL_H
 
 # include "../MLX42/include/MLX42/MLX42.h"
-# include "../libft/libft.h"
 # include <stdlib.h>
 # include <math.h>
 # include <stdio.h>
+# include <stdbool.h>
 
-# define WIDTH 600
-# define HEIGHT 400
+# define WIDTH 200
+# define HEIGHT 200
 # define MAX_ITER 1000
 
 typedef struct s_data
@@ -32,6 +32,7 @@ typedef struct s_data
 	double		y_min;
 	double		y_max;
 	double		zoom;
+	bool		needs_redraw;
 }	t_data;
 
 int		mandelbrot(double cr, double ci);

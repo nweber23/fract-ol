@@ -1,9 +1,11 @@
 NAME = fractol
-SRC = srcs/main.c
-OBJ_DIR = obj
+SRC = srcs/main.c srcs/phoenix.c srcs/calculation.c srcs/render.c \
+	srcs/zoom_mouse.c srcs/keyboard_utils.c
+OBJ_DIR = objs
 OBJ = $(SRC:srcs/%.c=$(OBJ_DIR)/%.o)
 CC = cc
-CFLAGS = -O3 -Wall -Wextra -Werror -I./includes/ -I./libft/includes/
+CFLAGS = -Ofast -march=native -mtune=native -flto -funroll-loops \
+	-ffast-math -Wall -Wextra -Werror -I./includes/ -I./libft/includes/
 
 # OS detection
 UNAME_S := $(shell uname -s)

@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/25 10:21:01 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/25 13:40:22 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdio.h>
 # include <stdbool.h>
 
-# define WIDTH 200
-# define HEIGHT 200
+# define WIDTH 600
+# define HEIGHT 400
 # define MAX_ITER 1000
 
 typedef struct s_data
@@ -36,10 +36,11 @@ typedef struct s_data
 }	t_data;
 
 int			mandelbrot(double cr, double ci);
+int			phoenix(double cr, double ci);
 void		render(t_data *data);
 void		ft_hook(void *param);
 void		mouse_hook(double xdelta, double ydelta, void *param);
-void		handle_movement_verical(t_data *data, mlx_t *mlx);
+void		handle_movement_vertical(t_data *data, mlx_t *mlx);
 void		handle_movement_horizontal(t_data *data, mlx_t *mlx);
 void		handle_zoom(t_data *data, mlx_t *mlx, double zoom_factor);
 void		zoom_in_keyboard(t_data *data, double zoom_factor);

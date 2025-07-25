@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 13:25:09 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/25 16:42:11 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/25 17:33:55 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ int	mandelbrot(double cr, double ci)
 		zr2 = zr * zr;
 		zi2 = zi * zi;
 		iter++;
-		if (iter > 16 && zr2 + zi2 < 0.001)
-			return (MAX_ITER);
 	}
 	return (iter);
 }

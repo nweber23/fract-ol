@@ -1,6 +1,7 @@
 NAME = fractol
 SRC = srcs/main.c
-OBJ = $(SRC:.c=.o)
+OBJ_DIR = obj
+OBJ = $(SRC:srcs/%.c=$(OBJ_DIR)/%.o)
 CC = cc
 CFLAGS = -O3 -Wall -Wextra -Werror -I./includes/ -I./libft/includes/
 
@@ -12,55 +13,53 @@ LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 # MLX42 configuration
-MLX_DIR = ./MLX42
-MLX_BUILD_DIR = $(MLX_DIR)/build
-MLX_LIB = $(MLX_BUILD_DIR)/libmlx.a
-MLX_INC = -I$(MLX_BUILD_DIR)
-MLX_REPO = https://github.com/codam-coding-college/MLX42.git
+MLX42_DIR = ./MLX42
 
 # Platform-specific settings
 ifeq ($(UNAME_S),Linux)
 	# Linux configuration
-	MLX_FLAGS = -L$(MLX_BUILD_DIR) -lmlx42 -ldl -lglfw -lm -pthread
+	LIBMLX42 = $(MLX42_DIR)/build/libmlx42.a -ldl -lglfw -pthread -lm
 	CFLAGS += -D LINUX
 else ifeq ($(UNAME_S),Darwin)
 	# macOS configuration
-	MLX_FLAGS = -L$(MLX_BUILD_DIR) -lmlx42 -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+	LIBMLX42 = $(MLX42_DIR)/build/libmlx42.a -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 	CFLAGS += -D OSX
 else
 	$(error OS not supported: $(UNAME_S))
 endif
 
-all: $(NAME)
+CFLAGS += -I$(MLX42_DIR)/include/MLX42
 
-$(NAME): $(OBJ) $(MLX_LIB) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(MLX_FLAGS) -L$(LIBFT_DIR) -lft
+all: $(LIBFT) $(LIBMLX42) $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) $(MLX_INC) -c $< -o $@
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBMLX42) $(LIBFT) -o $(NAME)
 
-$(MLX_LIB): | $(MLX_DIR)
-	cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
-
-$(MLX_DIR):
-	@if [ ! -d "$(MLX_DIR)/.git" ]; then \
-		echo "Cloning MLX42 repository..."; \
-		git clone $(MLX_REPO) $(MLX_DIR); \
-	else \
-		echo "MLX42 repository already exists. Skipping clone."; \
-	fi
+$(OBJ_DIR)/%.o: srcs/%.c includes/*.h
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
+$(LIBMLX42):
+	@if [ ! -d $(MLX42_DIR) ]; then \
+		git clone https://github.com/codam-coding-college/MLX42.git \
+		$(MLX42_DIR); \
+	fi
+	@if [ ! -f $(MLX42_DIR)/build/libmlx42.a ]; then \
+		cmake $(MLX42_DIR) -B $(MLX42_DIR)/build && \
+		cmake --build $(MLX42_DIR)/build -j4; \
+	fi
+
 clean:
-	rm -f $(OBJ)
-	if [ -d "$(MLX_BUILD_DIR)" ]; then $(MAKE) clean -C $(MLX_BUILD_DIR); fi
+	rm -rf $(OBJ_DIR)
 	$(MAKE) clean -C $(LIBFT_DIR)
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) fclean -C $(LIBFT_DIR)
+	@rm -rf $(MLX42_DIR)
 
 re: fclean all
 

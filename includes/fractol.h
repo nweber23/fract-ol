@@ -6,14 +6,14 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/25 10:00:57 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/25 10:21:01 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include "../MLX42/include/MLX42/MLX42.h"
+# include "MLX42.h"
 # include <stdlib.h>
 # include <math.h>
 # include <stdio.h>

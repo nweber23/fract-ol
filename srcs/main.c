@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/25 08:29:35 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/25 10:04:47 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,12 +162,12 @@ void	render(t_data *data)
 	int	y;
 
 	if (!data->needs_redraw)
-		return;
+		return ;
 	data->needs_redraw = false;
 	if (!check_render_safety(data))
 	{
 		reset_view(data);
-		return;
+		return ;
 	}
 	y = 0;
 	while (y < HEIGHT)
@@ -182,7 +182,7 @@ void	render(t_data *data)
 	}
 }
 
-void	handle_movement(t_data *data, mlx_t *mlx)
+void	handle_movement_vertical(t_data *data, mlx_t *mlx)
 {
 	double	move_step;
 
@@ -199,6 +199,13 @@ void	handle_movement(t_data *data, mlx_t *mlx)
 		data->y_max += move_step;
 		data->needs_redraw = true;
 	}
+}
+
+void	handle_movement_horizontal(t_data *data, mlx_t *mlx)
+{
+	double	move_step;
+
+	move_step = 0.05 * (data->x_max - data->x_min);
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 	{
 		data->x_min -= move_step;
@@ -266,7 +273,8 @@ void	handle_zoom(t_data *data, mlx_t *mlx, double zoom_factor)
 		zoom_out_keyboard(data, zoom_factor);
 }
 
-void	zoom_in_mouse(t_data *data, double mouse_cr, double mouse_ci, double zoom_factor)
+void	zoom_in_mouse(t_data *data, double mouse_cr,
+						double mouse_ci, double zoom_factor)
 {
 	double	new_x_min;
 	double	new_x_max;
@@ -290,7 +298,8 @@ void	zoom_in_mouse(t_data *data, double mouse_cr, double mouse_ci, double zoom_f
 	}
 }
 
-void	zoom_out_mouse(t_data *data, double mouse_cr, double mouse_ci, double zoom_factor)
+void	zoom_out_mouse(t_data *data, double mouse_cr,
+						double mouse_ci, double zoom_factor)
 {
 	double	x_range;
 	double	y_range;
@@ -322,8 +331,10 @@ void	mouse_hook(double xdelta, double ydelta, void *param)
 	(void)xdelta;
 	data = param;
 	mlx_get_mouse_pos(data->mlx, &mouse_x, &mouse_y);
-	mouse_cr = data->x_min + (mouse_x / (double)WIDTH) * (data->x_max - data->x_min);
-	mouse_ci = data->y_min + (mouse_y / (double)HEIGHT) * (data->y_max - data->y_min);
+	mouse_cr = data->x_min + (mouse_x / (double)WIDTH)
+		* (data->x_max - data->x_min);
+	mouse_ci = data->y_min + (mouse_y / (double)HEIGHT)
+		* (data->y_max - data->y_min);
 	if (ydelta > 0)
 	{
 		if ((data->x_max - data->x_min) * 0.9 > 1e-15)
@@ -351,7 +362,8 @@ void	ft_hook(void *param)
 		mlx_close_window(data->mlx);
 	if (mlx_is_key_down(data->mlx, MLX_KEY_R))
 		reset_view(data);
-	handle_movement(data, data->mlx);
+	handle_movement_vertical(data, data->mlx);
+	handle_movement_horizontal(data, data->mlx);
 	handle_zoom(data, data->mlx, 0.9);
 	if (data->needs_redraw)
 		render(data);

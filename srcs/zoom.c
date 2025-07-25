@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   zoom_mouse.c                                       :+:      :+:    :+:   */
+/*   zoom.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 13:22:12 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/25 13:22:53 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/25 23:10:22 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,23 @@ void	mouse_hook(double xdelta, double ydelta, void *param)
 	}
 	else if (ydelta < 0)
 		zoom_out_mouse(data, mouse_cr, mouse_ci, 0.9);
+}
+
+void	reset_view(t_data *data)
+{
+	if (data->fractal_type == JULIA)
+	{
+		data->x_min = -2.0;
+		data->x_max = 2.0;
+		data->y_min = -2.0;
+		data->y_max = 2.0;
+	}
+	else
+	{
+		data->x_min = -2.5;
+		data->x_max = 1.0;
+		data->y_min = -1.0;
+		data->y_max = 1.0;
+	}
+	data->needs_redraw = true;
 }

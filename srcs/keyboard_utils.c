@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 13:23:17 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/25 13:23:51 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/25 22:19:34 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,31 @@ void	zoom_out_keyboard(t_data *data, double zoom_factor)
 	}
 }
 
-void	reset_view(t_data *data)
+void	handle_color_keys(t_data *data, mlx_t *mlx)
 {
-	data->x_min = -2.5;
-	data->x_max = 1.0;
-	data->y_min = -1.0;
-	data->y_max = 1.0;
-	data->needs_redraw = true;
+	if (mlx_is_key_down(mlx, MLX_KEY_1))
+	{
+		data->color_mode = 0;
+		data->needs_redraw = true;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_2))
+	{
+		data->color_mode = 1;
+		data->needs_redraw = true;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_3))
+	{
+		data->color_mode = 2;
+		data->needs_redraw = true;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_4))
+	{
+		data->color_mode = 3;
+		data->needs_redraw = true;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_SPACE))
+	{
+		data->auto_shift = !data->auto_shift;
+		data->needs_redraw = true;
+	}
 }

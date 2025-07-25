@@ -1,5 +1,5 @@
 NAME = fractol
-SRC = srcs/main.c srcs/phoenix.c srcs/calculation.c srcs/render.c \
+SRC = srcs/main.c srcs/phoenix.c srcs/mandelbrot.c srcs/render.c \
 	srcs/zoom_mouse.c srcs/keyboard_utils.c
 OBJ_DIR = objs
 OBJ = $(SRC:srcs/%.c=$(OBJ_DIR)/%.o)

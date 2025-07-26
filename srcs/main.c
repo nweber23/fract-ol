@@ -6,66 +6,9 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/26 08:27:43 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/26 09:18:28 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/*
-Mathe Explained Mandelbrot
-	iter = 0 -> MAX ist 1000
-	min_x = -2.5, max_x = 1.0
-	min_y = -1.0, max_y = -1.0
-	Komplexe Zahl kann mit 2 double werten dargestellt werden|
-	zr = Realteil
-	zr_neu = zr * zr - zi * zi + cr
-	zi = Imaginärteil
-	zi_neu = 2 * zr * zi + ci;
-	cr = Realteil von c aka x-Koordinate
-	cr = x_min + (x / (double)WIDTH) * (x_max - x_min)
-	ci = Imaginärteil von c aka y-Koordinate
-	ci = y_min + (y / (double)HEIGHT) * (y_max - y_min)
-	c = Komplexe Zahl
-	c = cr + ci * i(i wird repraesentiert durch ci)
-*/
-
-/*
-Mathe Explained Julia
-	iter = 0 -> MAX ist z.B. 1000
-	min_x = -2.0, max_x = 2.0
-	min_y = -2.0, max_y = 2.0
-	Komplexe Zahlen bestehen aus 2 doubles
-	zr = Realteil von z (startet als Pixelkoordinate)
-	zi = Imaginärteil von z (startet als Pixelkoordinate)
-	cr = Konstanter Realteil von c (z.B. -0.7)
-	ci = Konstanter Imaginärteil von c (z.B. 0.27015)
-	Julia nutzt dieselbe Iteration wie Mandelbrot:
-		zr_neu = zr * zr - zi * zi + cr
-		zi_neu = 2 * zr * zi + ci
-	Der Unterschied: c (cr, ci) ist konstant, und z (zr, zi) ändert sich je Pixel
-	Julia erzeugt interessante Muster abhängig vom gewählten c
-*/
-
-/*
-Mathe Explained Phoenix
-	iter = 0 -> MAX z.B. 1000
-	Erweiterung der Mandelbrot-Menge mit Rückkopplung
-	Verwendet aktuellen z-Wert und vorherigen z-Wert
-	Formel:
-		z_next = z*z + p * z_prev + c
-	zr = Realteil von z
-	zi = Imaginärteil von z
-	z_prev_r = Realteil von z_{n-1}
-	z_prev_i = Imaginärteil von z_{n-1}
-	pr = Realteil von p (Parameter, z.B. -0.5)
-	pi = Imaginärteil von p (z.B. 0.5)
-	cr = Realteil von c aka x-Koordinate
-	cr = x_min + (x / (double)WIDTH) * (x_max - x_min)
-	ci = Imaginärteil von c aka y-Koordinate
-	ci = y_min + (y / (double)HEIGHT) * (y_max - y_min)
-	c = cr + ci * i
-	Jeder neue Wert hängt vom vorherigen ab, was komplexe Strukturen erzeugt
-	Mehr Kontrolle durch p – kleine Änderungen = große visuelle Unterschiede
-*/
 
 #include "fractol.h"
 

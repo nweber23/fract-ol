@@ -1,6 +1,7 @@
 NAME = fractol
 SRC = srcs/main.c srcs/phoenix.c srcs/mandelbrot.c srcs/render.c \
-	srcs/zoom_mouse.c srcs/keyboard_utils.c
+	srcs/zoom.c srcs/keyboard_utils.c srcs/julia.c \
+	srcs/args.c srcs/colors.c
 OBJ_DIR = objs
 OBJ = $(SRC:srcs/%.c=$(OBJ_DIR)/%.o)
 CC = cc

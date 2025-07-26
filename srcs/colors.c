@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 18:00:00 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/26 10:14:51 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/26 10:32:55 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ static uint32_t	fire(int iter, double shift)
 	t = fmod(((double)iter / MAX_ITER * 3.0) + shift, 1.0);
 	if (t < 0)
 		t += 1.0;
+	r = 255;
+	g = 255;
+	b = (uint8_t)(255 * ((t - 0.66) * 3));
 	if (t < 0.33)
 	{
 		r = (uint8_t)(255 * (t * 3));
@@ -65,17 +68,9 @@ static uint32_t	fire(int iter, double shift)
 		b = 0;
 	}
 	else if (t < 0.66)
-	{
-		r = 255;
 		g = (uint8_t)(255 * ((t - 0.33) * 3));
+	if (t < 0.66)
 		b = 0;
-	}
-	else
-	{
-		r = 255;
-		g = 255;
-		b = (uint8_t)(255 * ((t - 0.66) * 3));
-	}
 	return (0xFF000000 | (r << 16) | (g << 8) | b);
 }
 

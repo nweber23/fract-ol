@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 13:21:59 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/24 10:14:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/26 09:20:39 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@
 # include <stdint.h>
 # include <unistd.h>
 # include <stdlib.h>
+
+# if defined(__linux__)
+#  define NULL_PTR "(nil)"
+#  define NULL_PTR_LEN 5
+# elif defined(__APPLE__)
+#  define NULL_PTR "0x0"
+#  define NULL_PTR_LEN 3
+# endif
 
 // Mandatory functions
 int	ft_putchar(char c);

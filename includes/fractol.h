@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/26 08:28:14 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/26 09:28:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ typedef struct s_data
 	bool			auto_shift;
 }	t_data;
 
+// Calculating fractals
 int			mandelbrot(double cr, double ci);
 int			julia(double zr, double zi, double cr, double ci);
 int			phoenix(double cr, double ci);
-void		render(t_data *data);
+
+// Event handling
 void		ft_hook(void *param);
 void		mouse_hook(double xdelta, double ydelta, void *param);
 void		handle_movement_vertical(t_data *data, mlx_t *mlx);
@@ -64,15 +66,20 @@ void		zoom_in_mouse(t_data *data, double mouse_cr,
 				double mouse_ci, double zoom_factor);
 void		zoom_out_mouse(t_data *data, double mouse_cr,
 				double mouse_ci, double zoom_factor);
+void		handle_color_keys(t_data *data, mlx_t *mlx);
+
+// Rendering
+void		render(t_data *data);
 void		render_pixel(t_data *data, int x, int y);
 int			check_render_safety(t_data *data);
 void		reset_view(t_data *data);
-int			init_fractal(t_data *data);
 void		put_pixel_fast(mlx_image_t *image, int x, int y, uint32_t color);
 uint32_t	get_color(int iter, int color_mode, double shift);
+
+// Input parsing
+int			init_fractal(t_data *data);
 int			main(int argc, char **argv);
 int			parse_args(int argc, char **argv, t_data *data);
 void		print_usage(void);
-void		handle_color_keys(t_data *data, mlx_t *mlx);
 
 #endif

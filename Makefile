@@ -6,7 +6,9 @@ OBJ_DIR = objs
 OBJ = $(SRC:srcs/%.c=$(OBJ_DIR)/%.o)
 CC = cc
 CFLAGS = -Ofast -march=native -mtune=native -flto -funroll-loops \
-	-ffast-math -Wall -Wextra -Werror -I./includes/ -I./libft/includes/
+	-ffast-math -fno-math-errno -freciprocal-math -ffinite-math-only \
+	-fno-trapping-math -fno-signed-zeros -fassociative-math \
+	-Wall -Wextra -Werror -I./includes/ -I./libft/includes/
 
 # OS detection
 UNAME_S := $(shell uname -s)
@@ -64,6 +66,8 @@ fclean: clean
 	$(MAKE) fclean -C $(LIBFT_DIR)
 	@rm -rf $(MLX42_DIR)
 
-re: fclean all
+re:
+	$(MAKE) fclean
+	$(MAKE) all
 
 .PHONY: all clean fclean re

@@ -8,7 +8,10 @@ CC = cc
 CFLAGS = -Ofast -march=native -mtune=native -flto -funroll-loops \
 	-ffast-math -fno-math-errno -freciprocal-math -ffinite-math-only \
 	-fno-trapping-math -fno-signed-zeros -fassociative-math \
-	-Wall -Wextra -Werror -I./includes/ -I./libft/includes/
+	-ftree-vectorize -fomit-frame-pointer -finline-functions \
+	-fprefetch-loop-arrays -ftracer -funswitch-loops \
+	-Wall -Wextra -Werror -I./includes/ -I./libft/includes/ \
+	-pthread
 
 # OS detection
 UNAME_S := $(shell uname -s)

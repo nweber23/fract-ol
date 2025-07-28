@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 13:25:43 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/26 08:27:50 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/28 20:15:28 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ void	render_pixel(t_data *data, int x, int y)
 
 	x_range = data->x_max - data->x_min;
 	y_range = data->y_max - data->y_min;
-	cr = data->x_min + x * (x_range / WIDTH);
-	ci = data->y_min + y * (y_range / HEIGHT);
+	cr = data->x_min + x * (x_range / data->width);
+	ci = data->y_min + y * (y_range / data->height);
 	if (isfinite(cr) && isfinite(ci))
 	{
 		iter = calculate_fractal(data, cr, ci);
@@ -85,10 +85,10 @@ void	render(t_data *data)
 		return ;
 	}
 	y = 0;
-	while (y < HEIGHT)
+	while (y < data->height)
 	{
 		x = 0;
-		while (x < WIDTH)
+		while (x < data->width)
 		{
 			render_pixel(data, x, y);
 			x++;

@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/26 09:28:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/28 20:26:05 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <stdio.h>
 # include <stdbool.h>
 
-# define WIDTH 600
-# define HEIGHT 400
+# define INITIAL_WIDTH 1000
+# define INITIAL_HEIGHT 800
 # define MAX_ITER 1000
 
 typedef enum e_fractal_type
@@ -35,12 +35,15 @@ typedef struct s_data
 {
 	mlx_t			*mlx;
 	mlx_image_t		*image;
+	int				width;
+	int				height;
 	double			x_min;
 	double			x_max;
 	double			y_min;
 	double			y_max;
 	double			zoom;
 	bool			needs_redraw;
+	bool			needs_resize;
 	t_fractal_type	fractal_type;
 	double			julia_cr;
 	double			julia_ci;
@@ -56,6 +59,7 @@ int			phoenix(double cr, double ci);
 
 // Event handling
 void		ft_hook(void *param);
+void		resize_hook(int32_t width, int32_t height, void *param);
 void		mouse_hook(double xdelta, double ydelta, void *param);
 void		handle_movement_vertical(t_data *data, mlx_t *mlx);
 void		handle_movement_horizontal(t_data *data, mlx_t *mlx);
@@ -73,6 +77,7 @@ void		render(t_data *data);
 void		render_pixel(t_data *data, int x, int y);
 int			check_render_safety(t_data *data);
 void		reset_view(t_data *data);
+void		resize_image(t_data *data);
 void		put_pixel_fast(mlx_image_t *image, int x, int y, uint32_t color);
 uint32_t	get_color(int iter, int color_mode, double shift);
 
@@ -81,5 +86,6 @@ int			init_fractal(t_data *data);
 int			main(int argc, char **argv);
 int			parse_args(int argc, char **argv, t_data *data);
 void		print_usage(void);
+void		julia_check(t_data *data);
 
 #endif

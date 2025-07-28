@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/26 09:18:28 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/28 20:20:51 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,37 +32,62 @@ void	ft_hook(void *param)
 			data->color_shift = 0.0;
 		data->needs_redraw = true;
 	}
+	if (data->needs_resize)
+		resize_image(data);
 	if (data->needs_redraw)
 		render(data);
 }
 
+void	resize_hook(int32_t width, int32_t height, void *param)
+{
+	t_data	*data;
+
+	data = param;
+	if (width > 0 && height > 0)
+	{
+		data->width = width;
+		data->height = height;
+		data->needs_resize = true;
+	}
+}
+
 int	init_fractal(t_data *data)
 {
-	data->mlx = mlx_init(WIDTH, HEIGHT, "Fractol", false);
+	data->width = INITIAL_WIDTH;
+	data->height = INITIAL_HEIGHT;
+	data->mlx = mlx_init(data->width, data->height, "Fractol", true);
 	if (!data->mlx)
 		return (EXIT_FAILURE);
-	data->image = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	data->image = mlx_new_image(data->mlx, data->width, data->height);
 	if (!data->image)
 		return (mlx_terminate(data->mlx), EXIT_FAILURE);
-	if (data->fractal_type == JULIA)
-	{
-		data->x_min = -2.0;
-		data->x_max = 2.0;
-		data->y_min = -2.0;
-		data->y_max = 2.0;
-	}
-	else
-	{
-		data->x_min = -2.5;
-		data->x_max = 1.0;
-		data->y_min = -1.0;
-		data->y_max = 1.0;
-	}
+	julia_check(data);
 	data->needs_redraw = true;
+	data->needs_resize = false;
 	if (mlx_image_to_window(data->mlx, data->image, 0, 0) < 0)
 		return (mlx_terminate(data->mlx),
 			mlx_delete_image(data->mlx, data->image), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
+}
+
+void	resize_image(t_data *data)
+{
+	mlx_image_t	*new_image;
+
+	data->needs_resize = false;
+	if (data->width <= 0 || data->height <= 0)
+		return ;
+	new_image = mlx_new_image(data->mlx, data->width, data->height);
+	if (!new_image)
+		return ;
+	mlx_delete_image(data->mlx, data->image);
+	data->image = new_image;
+	if (mlx_image_to_window(data->mlx, data->image, 0, 0) < 0)
+	{
+		mlx_delete_image(data->mlx, data->image);
+		return ;
+	}
+	data->needs_redraw = true;
 }
 
 int	main(int argc, char **argv)
@@ -80,6 +105,7 @@ int	main(int argc, char **argv)
 	render(&data);
 	mlx_loop_hook(data.mlx, ft_hook, &data);
 	mlx_scroll_hook(data.mlx, mouse_hook, &data);
+	mlx_resize_hook(data.mlx, resize_hook, &data);
 	mlx_loop(data.mlx);
 	mlx_delete_image(data.mlx, data.image);
 	mlx_terminate(data.mlx);

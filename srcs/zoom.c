@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 13:22:12 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/25 23:10:22 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/28 20:14:52 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void	mouse_hook(double xdelta, double ydelta, void *param)
 	(void)xdelta;
 	data = param;
 	mlx_get_mouse_pos(data->mlx, &mouse_x, &mouse_y);
-	mouse_cr = data->x_min + (mouse_x / (double)WIDTH)
+	mouse_cr = data->x_min + (mouse_x / (double)data->width)
 		* (data->x_max - data->x_min);
-	mouse_ci = data->y_min + (mouse_y / (double)HEIGHT)
+	mouse_ci = data->y_min + (mouse_y / (double)data->height)
 		* (data->y_max - data->y_min);
 	if (ydelta > 0)
 	{

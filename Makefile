@@ -9,7 +9,6 @@ CFLAGS = -Ofast -march=native -mtune=native -flto -funroll-loops \
 	-ffast-math -fno-math-errno -freciprocal-math -ffinite-math-only \
 	-fno-trapping-math -fno-signed-zeros -fassociative-math \
 	-ftree-vectorize -fomit-frame-pointer -finline-functions \
-	-fprefetch-loop-arrays -ftracer -funswitch-loops \
 	-Wall -Wextra -Werror -I./includes/ -I./libft/includes/ \
 	-pthread
 

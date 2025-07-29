@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 13:23:17 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/25 22:19:34 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/29 18:48:13 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	zoom_in_keyboard(t_data *data, double zoom_factor)
 	y_center = (data->y_min + data->y_max) / 2;
 	new_x_range = (data->x_max - data->x_min) * zoom_factor;
 	new_y_range = (data->y_max - data->y_min) * zoom_factor;
-	if (new_x_range > 1e-15 && new_y_range > 1e-15)
+	if (new_x_range > 1e-14 && new_y_range > 1e-14)
 	{
 		if (isfinite(new_x_range) && isfinite(new_y_range))
 		{

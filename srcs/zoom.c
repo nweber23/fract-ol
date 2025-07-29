@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 13:22:12 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/28 20:14:52 by nweber           ###   ########.fr       */
+/*   Updated: 2025/07/29 20:43:45 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,16 @@ void	zoom_in_mouse(t_data *data, double mouse_cr,
 	double	new_x_max;
 	double	new_y_min;
 	double	new_y_max;
+	double	new_x_range;
 
+	new_x_range = (data->x_max - data->x_min) * zoom_factor;
 	new_x_min = mouse_cr - (mouse_cr - data->x_min) * zoom_factor;
 	new_x_max = mouse_cr + (data->x_max - mouse_cr) * zoom_factor;
 	new_y_min = mouse_ci - (mouse_ci - data->y_min) * zoom_factor;
 	new_y_max = mouse_ci + (data->y_max - mouse_ci) * zoom_factor;
 	if (isfinite(new_x_min) && isfinite(new_x_max))
 	{
-		if (isfinite(new_y_min) && isfinite(new_y_max))
+		if (isfinite(new_y_min) && isfinite(new_y_max) && new_x_range > 1e-14)
 		{
 			data->x_min = new_x_min;
 			data->x_max = new_x_max;

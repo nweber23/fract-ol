@@ -5,10 +5,8 @@ SRC = srcs/main.c srcs/phoenix.c srcs/mandelbrot.c srcs/render.c \
 OBJ_DIR = objs
 OBJ = $(SRC:srcs/%.c=$(OBJ_DIR)/%.o)
 CC = cc
-CFLAGS = -Ofast -march=native -mtune=native -flto -funroll-loops \
-	-ffast-math -fno-math-errno -freciprocal-math -ffinite-math-only \
-	-fno-trapping-math -fno-signed-zeros -fassociative-math \
-	-ftree-vectorize -fomit-frame-pointer -finline-functions \
+CFLAGS = -O3 -funroll-loops -flto -ftree-vectorize \
+	-fomit-frame-pointer -finline-functions \
 	-Wall -Wextra -Werror -I./includes/ -I./libft/includes/ \
 	-pthread
 

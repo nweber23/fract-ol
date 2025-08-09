@@ -42,7 +42,7 @@ all: $(LIBFT) $(LIBMLX42) $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBMLX42) $(LIBFT) -o $(NAME)
 
-$(OBJ_DIR)/%.o: srcs/%.c includes/*.h
+$(OBJ_DIR)/%.o: srcs/%.c includes/fractol.h
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

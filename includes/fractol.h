@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 22:48:01 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/28 20:26:05 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/06 19:14:32 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdbool.h>
+# include <string.h>
 
 # define INITIAL_WIDTH 1000
 # define INITIAL_HEIGHT 800
